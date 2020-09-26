@@ -1,18 +1,37 @@
 <template>
-  <h1>{{ msg }}</h1>
-  <button @click="count++">count is: {{ count }}</button>
-  <p>Edit <code>components/HelloWorld.vue</code> to test hot module replacement.</p>
+  <div>
+    やあ: {{pokemon && pokemon.url}}
+    <br>
+    <a v-if="pokemon" :href="pokemon.url">{{pokemon.name}}</a>
+    <div v-if="pokemon === undefined">Loading...</div>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import useSWRV from 'swrv'
+
+interface Pokemon {
+  url: string,
+  name: string
+}
+
 export default {
-  name: 'HelloWorld',
+  name: 'HellowWorld',
   props: {
-    msg: String
+    count: {
+      type: [Number, String],
+      default: ''
+    }
   },
-  data() {
+  setup (props) {
+    const { data: pokemon } = useSWRV<Pokemon>(() => `https://pokeapi.co/api/v2/pokemon/${props.count}`, key =>
+      fetch(key)
+        .then(res => res.json())
+        .then(json => ({ ...json, url: key }))
+    )
+
     return {
-      count: 0
+      pokemon
     }
   }
 }
