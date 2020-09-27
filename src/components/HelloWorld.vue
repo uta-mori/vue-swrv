@@ -1,40 +1,45 @@
 <template>
   <div>
-    やあ: {{pokemon && pokemon.url}}
-    <br>
-    <img v-if="pokemon" :src="pokemon.sprites.front_default">
-    <br>
-    <a v-if="pokemon" :href="pokemon.url">{{pokemon.name}}</a>
+    やあ: {{ pokemon && pokemon.url }}
+    <br />
+    <img v-if="pokemon" :src="pokemon.sprites.front_default" />
+    <br />
+    <a v-if="pokemon" :href="pokemon.url">{{ pokemon.name }}</a>
     <div v-if="pokemon === undefined">Loading...</div>
   </div>
 </template>
 
 <script lang="ts">
-import useSWRV from 'swrv'
+import useSWRV from "swrv";
 
 interface Pokemon {
-  url: string,
-  name: string
+  url: string;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
 }
 
 export default {
-  name: 'HellowWorld',
+  name: "HellowWorld",
   props: {
     count: {
       type: [Number, String],
-      default: ''
-    }
+      default: "",
+    },
   },
-  setup (props) {
-    const { data: pokemon } = useSWRV<Pokemon>(() => `https://pokeapi.co/api/v2/pokemon/${props.count}`, key =>
-      fetch(key)
-        .then(res => res.json())
-        .then(json => ({ ...json, url: key }))
-    )
+  setup(props) {
+    const { data: pokemon } = useSWRV<Pokemon>(
+      () => `https://pokeapi.co/api/v2/pokemon/${props.count}`,
+      (key) =>
+        fetch(key)
+          .then((res) => res.json())
+          .then((json) => ({ ...json, url: key }))
+    );
 
     return {
-      pokemon
-    }
-  }
-}
+      pokemon,
+    };
+  },
+};
 </script>
