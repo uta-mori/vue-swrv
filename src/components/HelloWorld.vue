@@ -2,6 +2,8 @@
   <div>
     やあ: {{pokemon && pokemon.url}}
     <br>
+    <img v-if="pokemon" :src="pokemon.sprites.front_default">
+    <br>
     <a v-if="pokemon" :href="pokemon.url">{{pokemon.name}}</a>
     <div v-if="pokemon === undefined">Loading...</div>
   </div>
